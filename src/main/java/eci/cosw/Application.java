@@ -35,10 +35,11 @@ public class Application implements CommandLineRunner {
         MongoOperations mongoOperation = (MongoOperations) applicationContext.getBean("mongoTemplate");
         GridFSFile file = gridFsTemplate.findOne(new Query().addCriteria(Criteria.where("filename").is("testing.png")));
 
-        DBObject objectData = new BasicDBObject();
+     /*   DBObject objectData = new BasicDBObject();
         objectData.put("contentType", "image/jpeg");
 
         URL url = new URL("https://i.dailymail.co.uk/i/pix/tm/2007/07/lionking1807_468x325._to_468x312jpeg");
         gridFsTemplate.store(url.openStream(), "lion.jpeg" ,objectData);
+        */
     }
 }

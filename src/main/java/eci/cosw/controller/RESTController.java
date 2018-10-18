@@ -1,6 +1,8 @@
 package eci.cosw.controller;
 
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import eci.cosw.data.TodoRepository;
 import eci.cosw.data.model.Todo;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -37,15 +40,15 @@ public class RESTController {
     public ResponseEntity<InputStreamResource> getFileByName(@PathVariable String filename) throws IOException {
 
         GridFSFile file = gridFsTemplate.findOne(new Query().addCriteria(Criteria.where("filename").is(filename)));
-        /*(file.getLength()==0) {
+        if (file==null) {
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
-        else{*/
+        else{
             GridFsResource resource = gridFsTemplate.getResource(file.getFilename());
             return ResponseEntity.ok()
                     .contentType(MediaType.valueOf(file.getMetadata().get("contentType").toString()))
                     .body(new InputStreamResource(resource.getInputStream()));
-       //}
+       }
 
 
     }
@@ -54,7 +57,10 @@ public class RESTController {
     @PostMapping("/files")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
 
-        //TODO implement method
+        DBObject objectData = new BasicDBObject();
+        objectData.put("contentType", "image/jpeg");
+        URL url = new URL("");
+        gridFsTemplate.store(url.openStream(), file.getName(),objectData);
         return null;
     }
 
